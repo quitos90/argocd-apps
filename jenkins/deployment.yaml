@@ -14,8 +14,7 @@ spec:
         app: jenkins-server
     spec:
       securityContext:
-            fsGroup: 1000
-            runAsUser: 1000
+            runAsUser: 0
       serviceAccountName: jenkins-admin
       containers:
         - name: jenkins
@@ -51,7 +50,12 @@ spec:
           volumeMounts:
             - name: jenkins-data
               mountPath: /var/jenkins_home
+            - name: docker-data
+              mountPath: /var/run/docker.sock
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
               claimName: jenkins-pv-claim
+        - name: docker-data
+          hostPath:
+            path: /var/run/docker.sock
